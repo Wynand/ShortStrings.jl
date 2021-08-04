@@ -126,6 +126,10 @@ function ShortString{T}(s::ShortString{S}) where {T, S}
     ShortString{T}(ntoh(T(_swapped_str(s))) | T(sz))
 end
 
+function ShortString(s::ShortString{T}) where T
+    return s
+end
+
 """Amount to shift ShortString value by for each UInt sized chunk"""
 const SHFT_INT = UInt === UInt32 ? 2 : 3
 

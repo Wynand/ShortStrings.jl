@@ -74,19 +74,6 @@ ss = ShortString15(s)
 @test ss3"ss3" === ShortString3("ss3")
 @test ss"" === ShortString("")
 
-@testset "create ShortStrings from ShortStrings" begin
-    len_127 = ss127"Be honest, do you actually need a string longer than this. Seriously. C'mon this is pretty long."
-    len_63 = ss63"Basically a fairly long string really"
-    len_31 =  ss31"A Longer String!!!"
-
-    len_15 = ss15"Short String!!!"
-    len_7 = ss7"ShrtStr"
-    len_3 = ss3"ss3"
-
-    for s in [len_127, len_63, len_31, len_15, len_7, len_3]
-        @test s == ShortString(s)
-    end
-end
 
 
 @testset "equality of different sized ShortStrings" begin
@@ -136,6 +123,35 @@ end
     @test ShortString7(ShortString7("ab")) isa ShortString7
 
     @test_throws ErrorException ShortString3(ShortString7("123456"))
+    
+    len_127 = ss127"Be honest, do you actually need a string longer than this. Seriously. C'mon this is pretty long."
+    len_63 = ss63"Basically a fairly long string really"
+    len_31 =  ss31"A Longer String!!!"
+    len_15 = ss15"Short String!!!"
+    len_7 = ss7"ShrtStr"
+    len_3 = ss3"ss3"
+    svec = [len_127, len_63, len_31, len_15, len_7, len_3]
+    svec_len = length(svec)
+
+    i = 1
+    while (i += 1) <= svec_len
+        str = svec[i]
+        T = typeof(str)
+        
+        # Making shortstring from same type of shortstring, and in general
+        @test str == T(str)
+        @test str == ShortString(str)
+
+        # Making shortstrings from different size shortstrings
+        for str_bigger in svec[1:(i-1)]
+            @test T(str_bigger) == str_bigger
+        end
+        
+        for str_smaller in [i+1:svec_len]
+            @test_throws MethodError T(str_smaller) == str_smaller
+        end
+    end
+
 end
 
 @testset "promote rule" begin
