@@ -74,6 +74,20 @@ ss = ShortString15(s)
 @test ss3"ss3" === ShortString3("ss3")
 @test ss"" === ShortString("")
 
+@testset "create ShortStrings from ShortStrings" begin
+    len_127 = ss127"Be honest, do you actually need a string longer than this. Seriously. C'mon this is pretty long."
+    len_63 = ss63"Basically a fairly long string really"
+    len_31 =  ss31"A Longer String!!!"
+
+    len_15 = ss15"Short String!!!"
+    len_7 = ss7"ShrtStr"
+    len_3 = ss3"ss3"
+
+    for s in [len_127, len_63, len_31, len_15, len_7, len_3]
+        @test s == ShortString(s)
+    end
+end
+
 
 @testset "equality of different sized ShortStrings" begin
     @test ShortString15("") == ShortString3("")
